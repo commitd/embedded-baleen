@@ -1,16 +1,13 @@
 package io.committed.baleen.embedded.pool;
 
+import io.committed.baleen.embedded.BaleenOutputConverter;
+import io.committed.baleen.embedded.EmbeddableBaleen;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.uima.jcas.JCas;
-
-import io.committed.baleen.embedded.BaleenOutputConverter;
-import io.committed.baleen.embedded.EmbeddableBaleen;
-
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 public class BaleenPool implements EmbeddableBaleen {

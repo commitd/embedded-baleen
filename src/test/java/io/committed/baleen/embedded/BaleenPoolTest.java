@@ -2,18 +2,15 @@ package io.committed.baleen.embedded;
 
 import static org.junit.Assert.assertEquals;
 
+import io.committed.baleen.embedded.example.OutputDocument;
+import io.committed.baleen.embedded.example.SingleDocumentOutputConverter;
+import io.committed.baleen.embedded.pool.BaleenPool;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.Test;
-
-import io.committed.baleen.embedded.example.OutputDocument;
-import io.committed.baleen.embedded.example.SingleDocumentOutputConverter;
-import io.committed.baleen.embedded.pool.BaleenPool;
-
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 public class BaleenPoolTest {
@@ -54,35 +51,35 @@ public class BaleenPoolTest {
 
     for (int i = 0; i < numRuns; i++) {
       new Thread(
-              () -> {
-                try {
-                  final InputStream content =
-                      new ByteArrayInputStream("This is a text file".getBytes());
+          () -> {
+            try {
+              final InputStream content =
+                  new ByteArrayInputStream("This is a text file".getBytes());
 
-                  final Optional<OutputDocument> optional =
-                      baleen.process(
-                          "test_source",
-                          content,
-                          (context, jCas) -> {
-                            try {
-                              Thread.sleep(1000);
-                            } catch (final InterruptedException e) {
-                              e.printStackTrace();
-                            }
-                            return new SingleDocumentOutputConverter().apply(context, jCas);
-                          });
+              final Optional<OutputDocument> optional =
+                  baleen.process(
+                      "test_source",
+                      content,
+                      (context, jCas) -> {
+                        try {
+                          Thread.sleep(1000);
+                        } catch (final InterruptedException e) {
+                          e.printStackTrace();
+                        }
+                        return new SingleDocumentOutputConverter().apply(context, jCas);
+                      });
 
-                  final OutputDocument document = optional.get();
+              final OutputDocument document = optional.get();
 
-                  assertEquals("This is a text file", document.getObject().get("content"));
-                  assertEquals("test_source", document.getObject().get("sourceUri"));
-                } catch (final Exception e) {
-                  errors.incrementAndGet();
-                  e.printStackTrace();
-                } finally {
-                  latch.countDown();
-                }
-              })
+              assertEquals("This is a text file", document.getObject().get("content"));
+              assertEquals("test_source", document.getObject().get("sourceUri"));
+            } catch (final Exception e) {
+              errors.incrementAndGet();
+              e.printStackTrace();
+            } finally {
+              latch.countDown();
+            }
+          })
           .start();
     }
 

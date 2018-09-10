@@ -1,7 +1,6 @@
 package io.committed.baleen.embedded.example;
 
 import java.util.Map;
-
 import org.apache.uima.jcas.tcas.DocumentAnnotation;
 
 public class OutputDocument {
