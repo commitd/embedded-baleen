@@ -2,6 +2,7 @@ package io.committed.baleen.embedded;
 
 import io.committed.baleen.embedded.pool.BaleenPool;
 import io.committed.baleen.embedded.single.EmbeddedBaleen;
+
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 public class EmbeddedBaleenFactory {

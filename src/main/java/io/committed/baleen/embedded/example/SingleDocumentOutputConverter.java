@@ -1,11 +1,14 @@
 package io.committed.baleen.embedded.example;
 
-import io.committed.baleen.embedded.BaleenOutputConverter;
-import io.committed.baleen.embedded.internal.BaleenContext;
 import java.util.Map;
 import java.util.Optional;
+
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.DocumentAnnotation;
+
+import io.committed.baleen.embedded.BaleenOutputConverter;
+import io.committed.baleen.embedded.internal.BaleenContext;
+
 import uk.gov.dstl.baleen.consumers.utils.DefaultFields;
 import uk.gov.dstl.baleen.consumers.utils.SingleDocumentConsumerFormat;
 import uk.gov.dstl.baleen.uima.UimaSupport;

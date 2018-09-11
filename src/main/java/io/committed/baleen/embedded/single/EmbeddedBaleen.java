@@ -1,21 +1,24 @@
 package io.committed.baleen.embedded.single;
 
-import io.committed.baleen.embedded.BaleenOutputConverter;
-import io.committed.baleen.embedded.EmbeddableBaleen;
-import io.committed.baleen.embedded.components.EmbeddedCollectionReader;
-import io.committed.baleen.embedded.components.EmbeddedConsumer;
-import io.committed.baleen.embedded.components.InputDocument;
-import io.committed.baleen.embedded.internal.BaleenContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.collection.CollectionException;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
+
+import io.committed.baleen.embedded.BaleenOutputConverter;
+import io.committed.baleen.embedded.EmbeddableBaleen;
+import io.committed.baleen.embedded.components.EmbeddedCollectionReader;
+import io.committed.baleen.embedded.components.EmbeddedConsumer;
+import io.committed.baleen.embedded.components.InputDocument;
+import io.committed.baleen.embedded.internal.BaleenContext;
+
 import uk.gov.dstl.baleen.core.pipelines.BaleenPipeline;
 import uk.gov.dstl.baleen.core.pipelines.PipelineBuilder;
 import uk.gov.dstl.baleen.core.pipelines.YamlPiplineConfiguration;
