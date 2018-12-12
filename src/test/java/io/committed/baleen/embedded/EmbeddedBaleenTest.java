@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 
+import io.committed.baleen.embedded.example.DoublingJCas;
 import io.committed.baleen.embedded.example.OutputDocument;
 import io.committed.baleen.embedded.example.SingleDocumentOutputConverter;
 import io.committed.baleen.embedded.single.EmbeddedBaleen;
@@ -30,6 +31,24 @@ public class EmbeddedBaleenTest {
     final OutputDocument document = optional.get();
 
     assertEquals("This is a text file", document.getObject().get("content"));
+    assertEquals("test_source", document.getObject().get("sourceUri"));
+  }
+
+  @Test
+  public void testWrapped() throws BaleenException {
+    final EmbeddedBaleen baleen = new EmbeddedBaleen("test");
+
+    final String yaml = "annotators:\n  - regex.Email";
+    final InputStream content = new ByteArrayInputStream("This is a text file".getBytes());
+
+    baleen.setup(yaml);
+    final Optional<OutputDocument> optional =
+        baleen.process(
+            DoublingJCas::new, new SingleDocumentOutputConverter(), "test_source", content);
+
+    final OutputDocument document = optional.get();
+
+    assertEquals("This is a text file This is a text file", document.getObject().get("content"));
     assertEquals("test_source", document.getObject().get("sourceUri"));
   }
 }

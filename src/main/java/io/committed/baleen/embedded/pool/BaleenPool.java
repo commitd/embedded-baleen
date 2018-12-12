@@ -2,14 +2,14 @@ package io.committed.baleen.embedded.pool;
 
 import java.io.InputStream;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.uima.jcas.JCas;
 
-import io.committed.baleen.embedded.BaleenOutputConverter;
 import io.committed.baleen.embedded.EmbeddableBaleen;
+import io.committed.baleen.embedded.WrappedBaleenOutputConverter;
 
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
@@ -45,30 +45,16 @@ public class BaleenPool implements EmbeddableBaleen {
   }
 
   @Override
-  public <T> Optional<T> process(
-      final String source, final InputStream content, final BaleenOutputConverter<T> consumer)
-      throws BaleenException {
-
-    EmbeddableBaleen baleen = borrowBaleenInstance();
-
-    try {
-      return baleen.process(source, content, consumer);
-    } finally {
-      returnBaleenInstance(baleen);
-    }
-  }
-
-  @Override
-  public <T> Optional<T> process(
+  public <J extends JCas, T> Optional<T> process(
+      Function<JCas, J> jCasWrapper,
+      WrappedBaleenOutputConverter<J, T> consumer,
       String source,
-      InputStream content,
-      Consumer<JCas> annotationCreator,
-      BaleenOutputConverter<T> consumer)
+      InputStream content)
       throws BaleenException {
-    EmbeddableBaleen baleen = borrowBaleenInstance();
 
+    EmbeddableBaleen baleen = borrowBaleenInstance();
     try {
-      return baleen.process(source, content, annotationCreator, consumer);
+      return baleen.process(jCasWrapper, consumer, source, content);
     } finally {
       returnBaleenInstance(baleen);
     }

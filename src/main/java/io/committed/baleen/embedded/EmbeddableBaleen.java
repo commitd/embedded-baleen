@@ -3,6 +3,7 @@ package io.committed.baleen.embedded;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.apache.uima.jcas.JCas;
 
@@ -17,13 +18,29 @@ public interface EmbeddableBaleen {
   default <T> Optional<T> process(
       String source, InputStream content, BaleenOutputConverter<T> consumer)
       throws BaleenException {
-    return process(source, content, (jCas) -> {}, consumer);
+    return process(source, content, jCas -> {}, consumer);
   }
 
-  <T> Optional<T> process(
+  default <T> Optional<T> process(
       String source,
       InputStream content,
       Consumer<JCas> annotationCreator,
       BaleenOutputConverter<T> consumer)
+      throws BaleenException {
+    return process(
+        jCas -> {
+          annotationCreator.accept(jCas);
+          return jCas;
+        },
+        consumer,
+        source,
+        content);
+  }
+
+  <J extends JCas, T> Optional<T> process(
+      Function<JCas, J> jCasWrapper,
+      WrappedBaleenOutputConverter<J, T> consumer,
+      String source,
+      InputStream content)
       throws BaleenException;
 }

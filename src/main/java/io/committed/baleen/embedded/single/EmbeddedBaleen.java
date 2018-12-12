@@ -3,7 +3,7 @@ package io.committed.baleen.embedded.single;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngine;
@@ -12,8 +12,8 @@ import org.apache.uima.collection.CollectionException;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
 
-import io.committed.baleen.embedded.BaleenOutputConverter;
 import io.committed.baleen.embedded.EmbeddableBaleen;
+import io.committed.baleen.embedded.WrappedBaleenOutputConverter;
 import io.committed.baleen.embedded.components.EmbeddedCollectionReader;
 import io.committed.baleen.embedded.components.EmbeddedConsumer;
 import io.committed.baleen.embedded.components.InputDocument;
@@ -35,11 +35,6 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
     this.pipelineName = pipelineName;
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see io.committed.baleen.embedded.lib.EmbeddableBaleen#setup(java.lang.String)
-   */
   @Override
   public void setup(final String yaml) throws BaleenException {
     if (pipeline != null) {
@@ -75,11 +70,6 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
     }
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see io.committed.baleen.embedded.lib.EmbeddableBaleen#shutdown()
-   */
   @Override
   public void shutdown() {
     if (pipeline == null) {
@@ -104,24 +94,11 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
   }
 
   @Override
-  public synchronized <T> Optional<T> process(
-      final String source, final InputStream content, final BaleenOutputConverter<T> consumer)
-      throws BaleenException {
-    return process(source, content, null, consumer);
-  }
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see io.committed.baleen.embedded.lib.EmbeddableBaleen#process(java.lang.String,
-   * java.io.InputStream, io.committed.baleen.embedded.lib.BaleenOutputConverter)
-   */
-  @Override
-  public synchronized <T> Optional<T> process(
-      final String source,
-      final InputStream content,
-      final Consumer<JCas> annotationCreator,
-      final BaleenOutputConverter<T> consumer)
+  public <J extends JCas, T> Optional<T> process(
+      Function<JCas, J> jCasWrapper,
+      WrappedBaleenOutputConverter<J, T> consumer,
+      String source,
+      InputStream content)
       throws BaleenException {
     // This is based on BaleenPipeline.run
 
@@ -133,26 +110,24 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
       // Prepare the JCas for the next document
       jCas.reset();
 
+      J toProcess = jCasWrapper.apply(jCas);
+
       // Get next document from Collection Reader
       final EmbeddedCollectionReader collectionReader =
           (EmbeddedCollectionReader) pipeline.collectionReader();
       collectionReader.setNextDocument(new InputDocument(source, content));
-      collectionReader.getNext(jCas.getCas());
-
-      if (annotationCreator != null) {
-        annotationCreator.accept(jCas);
-      }
+      collectionReader.getNext(toProcess);
 
       // Process JCas with each annotator in turn
       for (final AnalysisEngine ae : pipeline.annotators()) {
         // Taken from pipeline.processAnalysisEngine
-        ae.process(jCas);
+        ae.process(toProcess);
       }
 
       // Process JCas with each consumer in turn
       for (final AnalysisEngine ae : pipeline.consumers()) {
         // Taken from pipeline.processAnalysisEngine
-        ae.process(jCas);
+        ae.process(toProcess);
       }
 
       // Would be nice to have these in a consumer, but we can't easily get at the consumer instance
@@ -160,7 +135,8 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
       // So instead we use the support/monitor from collection reader in order to fake it
       // Passing to the output consumer as per the method params
       return consumer.apply(
-          new BaleenContext(collectionReader.getMonitor(), collectionReader.getSupport()), jCas);
+          new BaleenContext(collectionReader.getMonitor(), collectionReader.getSupport()),
+          toProcess);
     } catch (CollectionException | IOException | AnalysisEngineProcessException e) {
       throw new BaleenException(e);
     }
