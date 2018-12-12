@@ -5,7 +5,7 @@
 
   <groupId>io.committed.baleen</groupId>
   <artifactId>embedded-baleen</artifactId>
-  <version>0.1</version>
+  <version>0.2</version>
 
   <name>Embedded Baleen</name>
   <description>Library to embed Baleen into a Java application</description>
@@ -35,6 +35,9 @@
   <developers>
     <developer>
       <name>Chris Flatley</name>
+    </developer>
+    <developer>
+      <name>Stuart Hendren</name>
     </developer>
   </developers>
 
