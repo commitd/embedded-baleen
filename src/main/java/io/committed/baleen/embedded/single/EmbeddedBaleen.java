@@ -109,13 +109,13 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
       // Prepare the JCas for the next document
       jCas.reset();
 
-      J toProcess = jCasWrapper.apply(jCas);
-
       // Get next document from Collection Reader
       EmbeddedCollectionReader collectionReader =
           (EmbeddedCollectionReader) pipeline.collectionReader();
       collectionReader.setNextDocument(new InputDocument(source, content));
-      collectionReader.getNext(toProcess);
+      collectionReader.getNext(jCas);
+
+      J toProcess = jCasWrapper.apply(jCas);
 
       // Process JCas with each annotator in turn
       for (AnalysisEngine ae : pipeline.annotators()) {
