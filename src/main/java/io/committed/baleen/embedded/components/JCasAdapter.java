@@ -305,6 +305,11 @@ public class JCasAdapter implements JCas {
   }
 
   @Override
+  public Type getCasType(Class<? extends FeatureStructure> aClass) {
+    return jCas.getCasType(aClass);
+  }
+
+  @Override
   public AnnotationIndex<Annotation> getAnnotationIndex() {
     return jCas.getAnnotationIndex();
   }
