@@ -1,16 +1,13 @@
 package io.committed.baleen.embedded.pool;
 
+import io.committed.baleen.embedded.BaleenOutputConverter;
+import io.committed.baleen.embedded.EmbeddableBaleen;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.function.Function;
-
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.uima.jcas.JCas;
-
-import io.committed.baleen.embedded.EmbeddableBaleen;
-import io.committed.baleen.embedded.WrappedBaleenOutputConverter;
-
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 public class BaleenPool implements EmbeddableBaleen {
@@ -45,9 +42,9 @@ public class BaleenPool implements EmbeddableBaleen {
   }
 
   @Override
-  public <J extends JCas, T> Optional<T> process(
-      Function<JCas, J> jCasWrapper,
-      WrappedBaleenOutputConverter<J, T> consumer,
+  public <T> Optional<T> process(
+      Function<JCas, JCas> jCasWrapper,
+      BaleenOutputConverter<T> consumer,
       String source,
       InputStream content)
       throws BaleenException {

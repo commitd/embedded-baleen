@@ -1,24 +1,21 @@
 package io.committed.baleen.embedded.single;
 
+import io.committed.baleen.embedded.BaleenOutputConverter;
+import io.committed.baleen.embedded.EmbeddableBaleen;
+import io.committed.baleen.embedded.components.EmbeddedCollectionReader;
+import io.committed.baleen.embedded.components.EmbeddedConsumer;
+import io.committed.baleen.embedded.components.InputDocument;
+import io.committed.baleen.embedded.internal.BaleenContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.function.Function;
-
 import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.collection.CollectionException;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
-
-import io.committed.baleen.embedded.EmbeddableBaleen;
-import io.committed.baleen.embedded.WrappedBaleenOutputConverter;
-import io.committed.baleen.embedded.components.EmbeddedCollectionReader;
-import io.committed.baleen.embedded.components.EmbeddedConsumer;
-import io.committed.baleen.embedded.components.InputDocument;
-import io.committed.baleen.embedded.internal.BaleenContext;
-
 import uk.gov.dstl.baleen.core.pipelines.BaleenPipeline;
 import uk.gov.dstl.baleen.core.pipelines.PipelineBuilder;
 import uk.gov.dstl.baleen.core.pipelines.YamlPipelineConfiguration;
@@ -93,9 +90,9 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
   }
 
   @Override
-  public <J extends JCas, T> Optional<T> process(
-      Function<JCas, J> jCasWrapper,
-      WrappedBaleenOutputConverter<J, T> consumer,
+  public <T> Optional<T> process(
+      Function<JCas, JCas> jCasWrapper,
+      BaleenOutputConverter<T> consumer,
       String source,
       InputStream content)
       throws BaleenException {
@@ -115,7 +112,12 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
       collectionReader.setNextDocument(new InputDocument(source, content));
       collectionReader.getNext(jCas);
 
-      J toProcess = jCasWrapper.apply(jCas);
+      JCas toProcess = jCas;
+
+      // If we have an annotation creator run it now.
+      if(jCasWrapper != null) {
+        toProcess = jCasWrapper.apply(jCas);
+      }
 
       // Process JCas with each annotator in turn
       for (AnalysisEngine ae : pipeline.annotators()) {
@@ -135,7 +137,7 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
       // Passing to the output consumer as per the method params
       return consumer.apply(
           new BaleenContext(collectionReader.getMonitor(), collectionReader.getSupport()),
-          toProcess);
+          jCas);
     } catch (CollectionException | IOException | AnalysisEngineProcessException e) {
       throw new BaleenException(e);
     }

@@ -37,9 +37,9 @@ public interface EmbeddableBaleen {
         content);
   }
 
-  <J extends JCas, T> Optional<T> process(
-      Function<JCas, J> jCasWrapper,
-      WrappedBaleenOutputConverter<J, T> consumer,
+  <T> Optional<T> process(
+      Function<JCas, JCas> jCasWrapper,
+      BaleenOutputConverter<T> consumer,
       String source,
       InputStream content)
       throws BaleenException;
