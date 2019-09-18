@@ -44,7 +44,7 @@ public class EmbeddedBaleenTest {
     baleen.setup(yaml);
     final Optional<OutputDocument> optional =
         baleen.process(
-            DoublingJCas::new, new SingleDocumentOutputConverter(), "test_source", content);
+            new DoublingJCas(), new SingleDocumentOutputConverter(), "test_source", content);
 
     final OutputDocument document = optional.get();
 

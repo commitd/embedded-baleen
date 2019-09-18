@@ -1,11 +1,11 @@
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.committed.baleen</groupId>
   <artifactId>embedded-baleen</artifactId>
-  <version>0.2</version>
+  <version>0.3</version>
 
   <name>Embedded Baleen</name>
   <description>Library to embed Baleen into a Java application</description>
@@ -49,14 +49,13 @@
     <maven-spotless.version>1.14.0</maven-spotless.version>
 
     <!-- Dependencies -->
-    <baleen.version>2.6.0</baleen.version>
+    <baleen.version>2.7.0</baleen.version>
     <commons-pool2.version>2.4.2</commons-pool2.version>
 
     <!-- Test dependencies -->
     <junit.version>4.12</junit.version>
 
   </properties>
-
 
   <dependencies>
     <dependency>
