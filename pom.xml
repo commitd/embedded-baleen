@@ -50,7 +50,7 @@
 
     <!-- Dependencies -->
     <baleen.version>2.7.0</baleen.version>
-    <commons-pool2.version>2.4.2</commons-pool2.version>
+    <commons-pool2.version>2.7.0</commons-pool2.version>
 
     <!-- Test dependencies -->
     <junit.version>4.12</junit.version>
