@@ -1,0 +1,68 @@
+---
+kind: pipeline
+type: docker
+name: pr
+
+steps:
+  - name: restore-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: drone_m2_cache
+        path: /drone/.m2
+    settings:
+      restore: true
+      mount:
+        - /drone/.m2
+
+  - name: build
+    image: maven:3-jdk-11
+    environment:
+      NPM_CONFIG_USERCONFIG: /config/.npmrc
+      M2_HOME: /drone/.m2
+      MAVEN_HOME: /drone/.m2
+    volumes:
+      - name: drone_config
+        host:
+          path: /config
+      - name: drone_npm_cache
+        host:
+          path: /npm
+      - name: drone_m2_cache
+        host:
+          path: /drone/.m2
+    commands:
+      - mvn -B -Dmaven.repo.local=/drone/.m2 clean package
+
+  - name: code-analysis
+    image: maven:3-jdk-11
+    environment:
+      NPM_CONFIG_USERCONFIG: /config/.npmrc
+      M2_HOME: /drone/.m2
+      MAVEN_HOME: /drone/.m2
+      SONAR_HOST:
+        from_secret: sonar_host
+      SONAR_TOKEN:
+        from_secret: sonar_token
+    volumes:
+      - name: drone_m2_cache
+        host:
+          path: /drone/.m2
+    commands:
+      - mvn -B -Dmaven.repo.local=/drone/.m2 sonar:sonar -Dsonar.host.url=$SONAR_HOST -Dsonar.login=$SONAR_TOKEN
+
+  - name: rebuild-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: drone_m2_cache
+        path: /drone/.m2
+    settings:
+      rebuild: true
+      mount:
+        - /drone/.m2
+
+trigger:
+  event:
+    - pull-request
+    - push
+
+
