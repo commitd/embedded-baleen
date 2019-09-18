@@ -1,10 +1,8 @@
 package io.committed.baleen.embedded.components;
 
 import java.io.IOException;
-
 import org.apache.uima.UimaContext;
 import org.apache.uima.jcas.JCas;
-
 import uk.gov.dstl.baleen.uima.BaleenCollectionReader;
 import uk.gov.dstl.baleen.uima.UimaMonitor;
 import uk.gov.dstl.baleen.uima.UimaSupport;

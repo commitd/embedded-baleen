@@ -5,7 +5,7 @@
 
   <groupId>io.committed.baleen</groupId>
   <artifactId>embedded-baleen</artifactId>
-  <version>0.4-SNAPSHOT</version>
+  <version>0.3</version>
 
   <name>Embedded Baleen</name>
   <description>Library to embed Baleen into a Java application</description>
@@ -123,30 +123,26 @@
 
   <build>
     <plugins>
-      <!-- formatter -->
       <plugin>
-        <groupId>com.diffplug.spotless</groupId>
-        <artifactId>spotless-maven-plugin</artifactId>
-        <version>${maven-spotless.version}</version>
+        <groupId>io.committed</groupId>
+        <artifactId>speedy-spotless-maven-plugin</artifactId>
+        <version>0.0.2</version>
+        <executions>
+          <execution>
+            <id>install-formatter-hook</id>
+            <goals>
+              <goal>install-hooks</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
           <java>
             <googleJavaFormat>
               <style>GOOGLE</style>
             </googleJavaFormat>
-            <removeUnusedImports/>
-            <importOrder>
-              <order>java,javax,org,com,uk</order>
-            </importOrder>
+            <removeUnusedImports />
           </java>
         </configuration>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>apply</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
@@ -170,7 +166,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>3.0.1</version>
+            <version>3.1.0</version>
             <executions>
               <execution>
                 <id>attach-sources</id>
@@ -183,7 +179,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.10.4</version>
+            <version>3.1.1</version>
             <executions>
               <execution>
                 <id>attach-javadocs</id>

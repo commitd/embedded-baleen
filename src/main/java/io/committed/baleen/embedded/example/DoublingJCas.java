@@ -8,12 +8,12 @@ import uk.gov.dstl.baleen.uima.UimaSupport;
 /**
  * An example of how the JCas can be completed modified before entering the pipeline.
  *
- * This is just a simple example of repeasting the text.
+ * <p>This is just a simple example of repeasting the text.
  *
- * In a real example you have more work to do in order to copy over annotations (in this case you'd need to repeat those too).
+ * <p>In a real example you have more work to do in order to copy over annotations (in this case
+ * you'd need to repeat those too).
  */
 public class DoublingJCas implements Function<JCas, JCas> {
-
 
   @Override
   public JCas apply(JCas jCas) {

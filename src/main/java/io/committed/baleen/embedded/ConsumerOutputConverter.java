@@ -1,11 +1,9 @@
 package io.committed.baleen.embedded;
 
+import io.committed.baleen.embedded.internal.BaleenContext;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import org.apache.uima.jcas.JCas;
-
-import io.committed.baleen.embedded.internal.BaleenContext;
 
 public class ConsumerOutputConverter implements BaleenOutputConverter<JCas> {
 

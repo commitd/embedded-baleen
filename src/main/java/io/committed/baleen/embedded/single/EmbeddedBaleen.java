@@ -115,7 +115,7 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
       JCas toProcess = jCas;
 
       // If we have an annotation creator run it now.
-      if(jCasWrapper != null) {
+      if (jCasWrapper != null) {
         toProcess = jCasWrapper.apply(jCas);
       }
 
@@ -136,8 +136,7 @@ public class EmbeddedBaleen implements EmbeddableBaleen {
       // So instead we use the support/monitor from collection reader in order to fake it
       // Passing to the output consumer as per the method params
       return consumer.apply(
-          new BaleenContext(collectionReader.getMonitor(), collectionReader.getSupport()),
-          jCas);
+          new BaleenContext(collectionReader.getMonitor(), collectionReader.getSupport()), jCas);
     } catch (CollectionException | IOException | AnalysisEngineProcessException e) {
       throw new BaleenException(e);
     }

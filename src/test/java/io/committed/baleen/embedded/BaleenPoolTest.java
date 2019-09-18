@@ -2,18 +2,15 @@ package io.committed.baleen.embedded;
 
 import static org.junit.Assert.assertEquals;
 
+import io.committed.baleen.embedded.example.OutputDocument;
+import io.committed.baleen.embedded.example.SingleDocumentOutputConverter;
+import io.committed.baleen.embedded.pool.BaleenPool;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.Test;
-
-import io.committed.baleen.embedded.example.OutputDocument;
-import io.committed.baleen.embedded.example.SingleDocumentOutputConverter;
-import io.committed.baleen.embedded.pool.BaleenPool;
-
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 public class BaleenPoolTest {

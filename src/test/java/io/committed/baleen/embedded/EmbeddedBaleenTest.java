@@ -2,17 +2,14 @@ package io.committed.baleen.embedded;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Optional;
-
-import org.junit.Test;
-
 import io.committed.baleen.embedded.example.DoublingJCas;
 import io.committed.baleen.embedded.example.OutputDocument;
 import io.committed.baleen.embedded.example.SingleDocumentOutputConverter;
 import io.committed.baleen.embedded.single.EmbeddedBaleen;
-
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Optional;
+import org.junit.Test;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 public class EmbeddedBaleenTest {

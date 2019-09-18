@@ -4,9 +4,7 @@ import java.io.InputStream;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
 import org.apache.uima.jcas.JCas;
-
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 public interface EmbeddableBaleen {

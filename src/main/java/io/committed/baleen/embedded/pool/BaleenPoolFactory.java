@@ -1,13 +1,11 @@
 package io.committed.baleen.embedded.pool;
 
+import io.committed.baleen.embedded.EmbeddableBaleen;
+import io.committed.baleen.embedded.single.EmbeddedBaleen;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.PooledObjectFactory;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
-
-import io.committed.baleen.embedded.EmbeddableBaleen;
-import io.committed.baleen.embedded.single.EmbeddedBaleen;
 
 public class BaleenPoolFactory implements PooledObjectFactory<EmbeddableBaleen> {
 
